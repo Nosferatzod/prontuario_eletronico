@@ -30,10 +30,7 @@
                 Selecionado: <strong>{{ pacienteSelecionado.nome }}</strong> - {{ formatarCPF(pacienteSelecionado.cpf) }}
               </div>
             </div>
-            <div class="form-group">
-              <label>Usuário:</label>
-              <input v-model="usuario" type="text" disabled />
-            </div>
+
             <div class="form-group">
               <label>Peso (kg): <span class="required">*</span></label>
               <input v-model="peso" type="number" step="0.1" min="0" required />
@@ -48,7 +45,7 @@
 
           <div class="form-section">
             <div class="form-group" v-for="(campo, index) in sinaisVitais" :key="index">
-              <label>{{ campo.label }}</label>
+              <label>{{ campo.label }} <span v-if="campo.unidade">({{ campo.unidade }})</span></label>
               <input
                 v-model="campo.model"
                 :type="campo.type"
@@ -62,49 +59,56 @@
           </div>
 
           <div class="form-section three-columns-inline">
+            <!-- Alergia -->
             <div class="form-group">
               <label>Alergia: <span class="required">*</span></label>
               <div class="radio-group">
                 <label><input type="radio" v-model="alergia" value="sim" /> Sim</label>
                 <label><input type="radio" v-model="alergia" value="nao" /> Não</label>
               </div>
-              <div v-if="alergia === 'sim'" class="form-group sub-form-group">
-                <textarea class="expansivel" v-model="detalheAlergia" required></textarea>
-
-              </div>
+            </div>
+            <div v-if="alergia === 'sim'" class="sub-form-wrapper">
+              <label>Detalhes da Alergia:</label>
+              <textarea v-model="detalheAlergia" class="expansivel ampla" required placeholder="Descreva a alergia..."></textarea>
             </div>
 
+            <!-- Medicamentos -->
             <div class="form-group">
               <label>Medicamentos: <span class="required">*</span></label>
               <div class="radio-group">
                 <label><input type="radio" v-model="usoMedicamentos" value="sim" /> Sim</label>
                 <label><input type="radio" v-model="usoMedicamentos" value="nao" /> Não</label>
               </div>
-              <div v-if="usoMedicamentos === 'sim'" class="form-group sub-form-group">
-                <textarea v-model="detalheMedicamentos" rows="2" placeholder="Quais medicamentos?" required></textarea>
-              </div>
+            </div>
+            <div v-if="usoMedicamentos === 'sim'" class="sub-form-wrapper">
+              <label>Quais medicamentos?</label>
+              <textarea v-model="detalheMedicamentos" required placeholder="Informe os medicamentos..." class="expansivel ampla"></textarea>
             </div>
 
+            <!-- Tabagismo -->
             <div class="form-group">
               <label>Tabagismo: <span class="required">*</span></label>
               <div class="radio-group">
                 <label><input type="radio" v-model="tabagismo" value="sim" /> Sim</label>
                 <label><input type="radio" v-model="tabagismo" value="nao" /> Não</label>
               </div>
-              <div v-if="tabagismo === 'sim'" class="form-group sub-form-group">
-                <textarea v-model="detalheTabagismo" rows="3" placeholder="Frequência, tipo, há quanto tempo etc." required></textarea>
-              </div>
             </div>
-            
+            <div v-if="tabagismo === 'sim'" class="sub-form-wrapper">
+              <label>Frequência, tipo, há quanto tempo etc.:</label>
+              <textarea v-model="detalheTabagismo" required placeholder="Descreva o uso..." class="expansivel ampla"></textarea>
+            </div>
+
+            <!-- Etilismo -->
             <div class="form-group">
               <label>Etilismo: <span class="required">*</span></label>
               <div class="radio-group">
                 <label><input type="radio" v-model="etilismo" value="sim" /> Sim</label>
                 <label><input type="radio" v-model="etilismo" value="nao" /> Não</label>
               </div>
-              <div v-if="etilismo === 'sim'" class="form-group sub-form-group">
-                <textarea v-model="detalheEtilismo" rows="3" placeholder="Frequência, tipo, há quanto tempo etc." required></textarea>
-              </div>
+            </div>
+            <div v-if="etilismo === 'sim'" class="sub-form-wrapper">
+              <label>Frequência, tipo, há quanto tempo etc.:</label>
+              <textarea v-model="detalheEtilismo" required placeholder="Descreva o consumo..." class="expansivel ampla"></textarea>
             </div>
           </div>
 
@@ -127,6 +131,8 @@
     </div>
   </div>
 </template>
+
+
 
 <script>
 import { collection, getDocs, doc, setDoc } from "firebase/firestore";
@@ -156,12 +162,12 @@ export default {
       firebaseError: "",
       showRequiredError: false,
       sinaisVitais: [
-        { label: "Temperatura (°C):", model: "", type: "number", step: "0.1", required: true },
-        { label: "Frequência respiratória (rpm):", model: "", type: "number", min: "0" },
-        { label: "Frequência cardíaca (bpm):", model: "", type: "number", min: "0" },
-        { label: "Saturação de oxigênio (%):", model: "", type: "number", min: "0", max: "100" },
-        { label: "Pressão arterial (mmHg):", model: "", type: "text", placeholder: "Ex: 120/80" },
-        { label: "Glicemia (mg/dL):", model: "", type: "number", min: "0" }
+        { label: "Temperatura:", model: "", type: "number", step: "0.1", unidade: "°C" },
+        { label: "Frequência respiratória:", model: "", type: "number", min: "0", unidade: "rpm" },
+        { label: "Frequência cardíaca:", model: "", type: "number", min: "0", unidade: "bpm" },
+        { label: "Saturação de oxigênio:", model: "", type: "number", min: "0", max: "100", unidade: "%" },
+        { label: "Pressão arterial:", model: "", type: "text", placeholder: "Ex: 120/80", unidade: "mmHg" },
+        { label: "Glicemia:", model: "", type: "number", min: "0", unidade: "mg/dL" }
       ]
     };
   },
@@ -213,7 +219,6 @@ export default {
         return;
       }
 
-      // Validação simples dos campos obrigatórios
       if (
         !this.peso ||
         !this.altura ||
@@ -227,7 +232,6 @@ export default {
         return;
       }
 
-      // Validação se detalhes obrigatórios aparecem
       if (this.alergia === "sim" && !this.detalheAlergia) {
         this.showRequiredError = true;
         return;
@@ -247,17 +251,9 @@ export default {
 
       try {
         const triagemId = this.pacienteSelecionado.cpf;
-
-        // Extrai os sinais vitais para objeto com chaves legíveis
         const sinaisVitaisObj = {};
         this.sinaisVitais.forEach(item => {
-          let key = item.label
-            .toLowerCase()
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "")
-            .replace(/[^a-z0-9]/g, "_")
-            .replace(/_+/g, "_")
-            .replace(/^_|_$/g, "");
+          let key = item.label.toLowerCase().normalize("NFD").replace(/[^a-z0-9]/g, "_").replace(/_+/g, "_").replace(/^_|_$/g, "");
           sinaisVitaisObj[key] = item.model;
         });
 
@@ -282,7 +278,7 @@ export default {
           queixas: this.queixas,
           dataRegistro: new Date()
         };
-        
+
         await setDoc(doc(db, "triagens", triagemId), triagemData);
         alert("Triagem salva com sucesso!");
         this.$router.push("/");
@@ -420,7 +416,27 @@ textarea.expansivel {
   width: 100%;
   resize: vertical;
 }
+textarea.expansivel.ampla {
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  min-height: 150px;
+  height: auto;
+  resize: vertical;
+  font-size: 1rem;
+  padding: 14px;
+  line-height: 1.6;
+  box-sizing: border-box;
+  display: block;
+}
 
+
+@media (max-width: 768px) {
+  textarea.expansivel.ampla {
+    min-height: 140px;
+    font-size: 0.95rem;
+  }
+}
 
 .required {
   color: red;
@@ -506,6 +522,21 @@ textarea.expansivel {
   padding: 8px 12px;
   cursor: pointer;
   border-bottom: 1px solid #eee;
+}
+
+.sub-form-wrapper {
+  flex: 1 1 100%;
+  max-width: 100%;
+  margin-top: 10px;
+}
+
+.sub-form-wrapper textarea {
+  width: 100%;
+  min-height: 150px;
+  resize: vertical;
+  padding: 12px;
+  font-size: 1rem;
+  box-sizing: border-box;
 }
 
 .dropdown li:hover {

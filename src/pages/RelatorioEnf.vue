@@ -263,51 +263,46 @@ export default {
     },
 
     gerarWord() {
-      const pacienteNome = this.pacienteSelecionado?.nome || '_______________________________';
-      const pacienteDataNasc = this.formatarDataNascimento(this.pacienteSelecionado?.dataNascimento);
+  const pacienteNome = this.pacienteSelecionado?.nome || '_______________________________';
+  const pacienteDataNasc = this.formatarDataNascimento(this.pacienteSelecionado?.dataNascimento);
 
-      // Conteúdo do relatório
-      const relatorioContent = document.getElementById("relatorio").innerText; // Pega o texto do div #relatorio
-      const relatorioLines = relatorioContent.split('\n').map(line => new Paragraph(line.trim()));
+  // Captura o conteúdo visual do relatório
+  const relatorioContent = document.getElementById("relatorio").innerText;
+  const relatorioLines = relatorioContent.split('\n').map(line => new Paragraph(line.trim()));
 
-      const doc = new Document({
-        sections: [
-          {
-            properties: {},
+  const doc = new Document({
+    sections: [
+      {
+        properties: {},
+        children: [
+          new Paragraph({
             children: [
-              new Paragraph({
-                children: [
-                  new TextRun({
-                    text: "Instrumento para Registros de Enfermagem",
-                    bold: true,
-                    size: 28,
-                  }),
-                ],
+              new TextRun({
+                text: "Instrumento para Registros de Enfermagem",
+                bold: true,
+                size: 28,
               }),
-              new Paragraph(" "),
-              new Paragraph(
-                `PACIENTE: ${pacienteNome}    DATA DE NASCIMENTO: ${pacienteDataNasc}    TURNO: ( ) DIURNO ( ) NOTURNO`
-              ),
-              new Paragraph(" "),
-              // Adiciona o conteúdo do relatório dinamicamente
-              ...relatorioLines, // Usa o conteúdo extraído do HTML
-              new Paragraph(" "), // Espaçamento antes da assinatura
-              new Paragraph(" "), // Espaçamento antes da assinatura
-              new Paragraph("_________________________________"),
-              new Paragraph(`Assinatura do profissional: ${this.profissionalNome}`),
-              new Paragraph(`Registro: ${this.profissionalRegistro}`),
             ],
-          },
+          }),
+          new Paragraph(" "),
+          new Paragraph(
+            `PACIENTE: ${pacienteNome}    DATA DE NASCIMENTO: ${pacienteDataNasc}    TURNO: ( ) DIURNO ( ) NOTURNO`
+          ),
+          new Paragraph(" "),
+          // Adiciona o conteúdo do HTML dinamicamente
+          ...relatorioLines // <-- Já inclui a assinatura do profissional no final
         ],
-      });
+      },
+    ],
+  });
 
-      Packer.toBlob(doc).then((blob) => {
-        const nomeArquivo = this.pacienteSelecionado
-          ? `Relatorio_Enfermagem_${this.pacienteSelecionado.nome}.docx`
-          : "Relatorio_Enfermagem.docx";
-        saveAs(blob, nomeArquivo);
-      });
-    },
+  Packer.toBlob(doc).then((blob) => {
+    const nomeArquivo = this.pacienteSelecionado
+      ? `Relatorio_Enfermagem_${this.pacienteSelecionado.nome}.docx`
+      : "Relatorio_Enfermagem.docx";
+    saveAs(blob, nomeArquivo);
+  });
+},
 
     gerarPDF() {
       const element = document.getElementById("relatorio");

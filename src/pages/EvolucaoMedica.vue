@@ -8,7 +8,11 @@
           <label>Médico:</label>
           <select v-model="evolucao.medico" required>
             <option value="">Selecione o médico</option>
-            <option v-for="medico in medicos" :key="medico.id" :value="medico.nome">
+            <option
+              v-for="medico in medicos"
+              :key="medico.id"
+              :value="medico.nome"
+            >
               {{ medico.nome }} - {{ medico.cpf }}
             </option>
           </select>
@@ -16,9 +20,17 @@
 
         <div class="form-group">
           <label>Paciente:</label>
-          <select v-model="pacienteSelecionado" @change="carregarDadosPaciente" required>
+          <select
+            v-model="pacienteSelecionado"
+            @change="carregarDadosPaciente"
+            required
+          >
             <option value="">Selecione o paciente</option>
-            <option v-for="paciente in pacientes" :key="paciente.id" :value="paciente">
+            <option
+              v-for="paciente in pacientes"
+              :key="paciente.id"
+              :value="paciente"
+            >
               {{ paciente.nome }} - {{ paciente.cpf }}
             </option>
           </select>
@@ -43,6 +55,7 @@
 
     <div class="vital-signs">
       <h3>Dados Vitais</h3>
+
       <div class="form-row">
         <div class="form-group">
           <label>Pressão Arterial:</label>
@@ -93,7 +106,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import { db } from '@/firebase';
 import { collection, getDocs, query, where, addDoc } from 'firebase/firestore';
@@ -135,7 +147,10 @@ export default {
     },
 
     async carregarMedicos() {
-      const q = query(collection(db, 'usuarios'), where('ocupacao', '==', 'medico'));
+      const q = query(
+        collection(db, 'usuarios'),
+        where('ocupacao', '==', 'medico')
+      );
       const querySnapshot = await getDocs(q);
       this.medicos = querySnapshot.docs.map(doc => ({
         id: doc.id,
@@ -151,8 +166,8 @@ export default {
         collection(db, 'triagens'),
         where('pacienteId', '==', this.pacienteSelecionado.id)
       );
-
       const querySnapshot = await getDocs(q);
+
       if (!querySnapshot.empty) {
         const triagem = querySnapshot.docs[0].data();
         this.evolucao = {
@@ -207,7 +222,6 @@ export default {
   }
 };
 </script>
-
 <style scoped>
 .container {
   max-width: 900px;
@@ -251,7 +265,9 @@ label {
   font-weight: bold;
 }
 
-select, input, textarea {
+select,
+input,
+textarea {
   width: 100%;
   padding: 8px;
   border: 1px solid #ddd;
@@ -280,7 +296,7 @@ button {
 }
 
 .btn-salvar {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
 }
 

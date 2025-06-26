@@ -172,7 +172,7 @@ export default {
 <style scoped>
 .container-prescricao-med {
   max-width: 600px;
-  margin: 40px auto;
+  margin: 120px auto;
   padding: 25px;
   background: #fff;
   border-radius: 10px;

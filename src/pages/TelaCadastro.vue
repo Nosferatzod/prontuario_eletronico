@@ -329,4 +329,7 @@ span {
     opacity: 1;
   }
 }
+span{
+  color: white;
+}
 </style>

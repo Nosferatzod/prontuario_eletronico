@@ -4,16 +4,19 @@
     <div class="main-content" :class="{ 'with-header': mostrarHeader }">
       <router-view/>
     </div>
+    <FooterPrincipal/>
   </div>
 </template>
 
 <script>
 import HeaderProntuario from '@/components/HeaderProntuario.vue';
+import FooterPrincipal from '@/components/FooterPrincipal.vue';
 
 export default {
   name: 'App',
   components: {
-    HeaderProntuario
+    HeaderProntuario,
+    FooterPrincipal
   },
   computed: {
     mostrarHeader() {

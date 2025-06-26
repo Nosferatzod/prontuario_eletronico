@@ -3,18 +3,18 @@
     <h2>Cadastro de Paciente</h2>
     <form @submit.prevent="salvarPaciente">
       <div class="form-group">
-        <label>Nome Completo:*</label>
+        <label>Nome Completo:</label>
         <input v-model="paciente.nome" required />
       </div>
 
       <div class="form-row">
         <div class="form-group">
-          <label>Data de Nascimento:*</label>
+          <label>Data de Nascimento:</label>
           <input v-model="paciente.dataNascimento" type="date" required />
         </div>
 
         <div class="form-group">
-          <label>CPF:*</label>
+          <label>CPF:</label>
           <input
             v-model="paciente.cpf"
             @input="formatarCPF"
@@ -26,7 +26,7 @@
 
       <div class="form-row">
         <div class="form-group">
-          <label>Celular:*</label>
+          <label>Celular:</label>
           <input
             v-model="paciente.celular"
             @input="formatarCelular"
@@ -46,25 +46,25 @@
       </div>
 
       <div class="form-group">
-        <label>Endereço (Logradouro):*</label>
+        <label>Endereço (Logradouro):</label>
         <input v-model="paciente.endereco" required />
       </div>
 
       <div class="form-row">
         <div class="form-group">
-          <label>Número:*</label>
+          <label>Número:</label>
           <input v-model="paciente.numero" required />
         </div>
 
         <div class="form-group">
-          <label>Bairro:*</label>
+          <label>Bairro:</label>
           <input v-model="paciente.bairro" required />
         </div>
       </div>
 
       <div class="form-row">
         <div class="form-group">
-          <label>UF:*</label>
+          <label>UF:</label>
           <select v-model="paciente.uf" required>
             <option value="">Selecione</option>
             <option v-for="uf in ufs" :key="uf" :value="uf">{{ uf }}</option>
@@ -262,7 +262,7 @@ export default {
 <style scoped>
 .container {
   max-width: 800px;
-  margin: 80px auto 40px;
+  margin: 120px auto 40px;
   padding: 20px;
   background-color: white;
   border-radius: 8px;

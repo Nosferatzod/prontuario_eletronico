@@ -63,6 +63,7 @@
                 <li class="nav-item dropdown" v-if="isAdmin || isRecepcao">
                   <a class="nav-link dropdown-toggle" href="#" @click.prevent="toggleDropdown('cadastros')">
                     Cadastros
+                  <i class="fas fa-chevron-down seta" :class="{ rotacionada: dropdowns.cadastros }"></i>
                   </a>
                   <ul class="dropdown-menu" :class="{ 'show': dropdowns.cadastros }">
                     <li v-if="isAdmin">
@@ -76,8 +77,9 @@
 
                 <!-- Enfermagem -->
                 <li class="nav-item dropdown" v-if="isEnfermeiro || isTecnico || isAdmin">
-                  <a class="nav-link dropdown-toggle" href="#" @click.prevent="toggleDropdown('enfermagem')">
-                    Enfermagem
+                 <a class="nav-link dropdown-toggle" href="#" @click.prevent="toggleDropdown('enfermagem')">
+                  Enfermagem
+                  <i class="fas fa-chevron-down seta" :class="{ rotacionada: dropdowns.enfermagem }"></i>
                   </a>
                   <ul class="dropdown-menu" :class="{ 'show': dropdowns.enfermagem }">
                     <li v-if="isEnfermeiro || isAdmin">
@@ -94,8 +96,9 @@
 
                 <!-- Médico -->
                 <li class="nav-item dropdown" v-if="isMedico || isAdmin">
-                  <a class="nav-link dropdown-toggle" href="#" @click.prevent="toggleDropdown('medico')">
+                 <a class="nav-link dropdown-toggle" href="#" @click.prevent="toggleDropdown('medico')">
                     Atendimento Médico
+                  <i class="fas fa-chevron-down seta" :class="{ rotacionada: dropdowns.medico }"></i>
                   </a>
                   <ul class="dropdown-menu" :class="{ 'show': dropdowns.medico }">
                     <li>
@@ -275,6 +278,19 @@ export default {
 </script>
 
 <style scoped>
+.nav-link.dropdown-toggle::after {
+  display: none !important;
+}
+
+.seta {
+  margin-left: 6px;
+  transition: transform 0.3s ease;
+}
+
+.rotacionada {
+  transform: rotate(180deg);
+}
+
 .min-vh-100 {
   min-height: 100vh;
 }
@@ -309,6 +325,6 @@ button {
   max-height: 300px;
   margin-top: 130px;
   width: auto;
+  padding: 0px 0px;
 }
-
 </style>

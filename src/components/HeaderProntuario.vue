@@ -58,8 +58,12 @@
 </div>
       <div class="conteudo-perfil">
         <p><strong>Nome:</strong> {{ usuario.nome }}</p>
-        <p><strong>Ocupação:</strong> {{ usuario.cargo }}</p>
+        <p><strong>ID do Usuário:</strong> {{ usuarioId }}</p>
         <p><strong>Email:</strong> {{ usuario.email }}</p>
+        <p><strong>Ocupação:</strong> {{ usuario.cargo }}</p>
+        <p><strong>Registro profissional:</strong> {{ usuario.registro }}</p>
+        <p><strong>Descrição:</strong> {{ usuario.descricao }}</p>
+  
       </div>
       <!-- Botão para ativar o modo edição -->
 <button v-if="!editandoPerfil" class="btn btn-primary w-100 mb-2" @click="editandoPerfil = true">
@@ -73,12 +77,25 @@
     <input v-model="usuario.nome" type="text" class="form-control" />
   </div>
   <div class="mb-2">
-    <label class="form-label">Ocupação</label>
-    <input v-model="usuario.cargo" type="text" class="form-control" />
+    <label class="form-label">ID do Usuário</label>
+    <input v-model="usuarioId" type="email" class="form-control" disabled />
   </div>
   <div class="mb-2">
     <label class="form-label">Email</label>
     <input v-model="usuario.email" type="email" class="form-control" disabled />
+  </div>
+  <div class="mb-2">
+    <label class="form-label">Ocupação</label>
+    <input v-model="usuario.cargo" type="text" class="form-control" disabled />
+  </div>
+   <div class="mb-2">
+    <label class="form-label">Registro Profissional</label>
+    <input v-model="usuario.registro" type="text" class="form-control" disabled />
+  </div>
+  <div class="mb-2">
+    <label class="form-label">Descrição</label>
+    <input v-model="usuario.descricao" type="text" class="form-control-maior" />
+    <span class="text-opcional">Opcional, não é necessário preencher</span>
   </div>
 
   <button class="btn btn-success w-100 mb-2" @click="salvarPerfil">
@@ -111,8 +128,11 @@ export default {
       notificacoesLidas: false,
       usuario: {
         nome: '',
+        usuarioId: '',
+        email: '',
         cargo: '',
-        email: ''
+        registro: '',
+        descricao: ''
       },
       unsubListeners: [],
       editandoPerfil: false,
@@ -167,8 +187,12 @@ export default {
 
           this.usuario = {
           nome: data.nome || '',
+          usuarioId: data.usuarioId || '',
+          email: data.email || ''  ,
           cargo: data.ocupacao || '',
-          email: data.email || ''  
+          registro: data.registro || '',
+          descricao: data.descricao || ''
+          
       };
     this.usuarioId = docRef.id;
         } else {
@@ -184,7 +208,7 @@ export default {
 
       await updateDoc(userRef, {
         nome: this.usuario.nome,
-        ocupacao: this.usuario.cargo,
+        descricao: this.usuario.descricao // descrição é opcional
         // email está desativado, mas poderia ser adicionado aqui também
       });
 
@@ -237,6 +261,12 @@ export default {
 </script>
 
 <style scoped>
+.painel-perfil {
+  /* já possui outras propriedades */
+  overflow-y: auto; /* habilita rolagem vertical */
+  max-height: 100vh; /* garante que não ultrapasse a tela */
+}
+
 /* Header */
 #header {
   background-color: #5a9deb;
@@ -330,15 +360,16 @@ export default {
   right: -350px;
   width: 300px;
   height: 100%;
-  background-color: white;
+  background-color: rgb(227, 237, 252);
   box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
   padding: 20px;
   z-index: 2000;
   transition: right 0.3s ease;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
+  overflow-y: auto; /* <- adicionado */
+  max-height: 100vh; /* <- adicionado */
 }
-
 .painel-perfil.aberto {
   right: 0;
 }
@@ -350,8 +381,8 @@ export default {
 }
 
 .foto-perfil img {
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
   border: black;
   padding: 8px;
@@ -387,6 +418,11 @@ export default {
 .form-edicao input {
   font-size: 14px;
 }
+.text-opcional {
+  font-size: 12px;
+  color: #50aaff;
+  margin-top: 12px;
+}
 
 .btn-danger {
   display: flex;
@@ -408,6 +444,14 @@ export default {
   display: block;
   color: #333;
 }
+
+.form-control-maior {
+  padding: 1rem;
+  margin-top: 0.20rem;
+  border-radius: 0.50rem;
+  border: 1px solid #ccc;
+}
+
 
 /* Responsivo */
 @media (max-width: 991.98px) {
