@@ -301,6 +301,8 @@ export default {
   top: 60px;
   right: 0;
   width: 300px;
+  max-height: 300px;/*Limita a altura*/
+  overflow-y:auto;/* Habilita a rolagem vertical*/
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -462,4 +464,28 @@ export default {
     border-radius: 0.25rem;
   }
 }
-</style>  
+
+@media (max-width: 991.98px) {
+  .navbar-collapse {
+    padding: 1rem;
+    background-color: #5a9deb;
+    margin-top: 0.5rem;
+    border-radius: 0.25rem;
+  }
+
+  .navbar-nav {
+    flex-direction: row !important;
+    justify-content: flex-end;
+    gap: 15px;
+  }
+
+  .navbar-nav .nav-item {
+    margin: 0;
+  }
+
+  .navbar-nav .nav-item i {
+    font-size: 24px;
+  }
+}
+
+</style> 
