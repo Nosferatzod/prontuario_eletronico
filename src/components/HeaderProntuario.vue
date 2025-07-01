@@ -472,7 +472,14 @@ export default {
     margin-top: 0.5rem;
     border-radius: 0.25rem;
   }
-
+  .notifications-dropdown {
+    width: 300px !important; /* ou 280px se quiser ainda menor */
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%);
+    top: 60px;
+    max-height: 250px;
+  }
   .navbar-nav {
     flex-direction: row !important;
     justify-content: flex-end;
@@ -488,4 +495,4 @@ export default {
   }
 }
 
-</style> 
+</style>  
